@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ChipTextView</string>
+    <string name="default_chip">Default (Chips will take the same ChipTextView android:textSize and android:textColor)</string>
+    <string name="with_layout">With layout res, background color and click listener</string>
+    <string name="with_override">With overrided Chip getLayoutRes and getBackgroundRes</string>
+</resources>
