@@ -141,8 +141,8 @@ The `Chip` falls back to default behaviour if you return 0.
 ## Why ?
 ChipTextView is a personal need for one of my project, I decided to develop and distribute it because I couldn't find anything which matched what I was seeking.
 
-### How this work
-ChipTextView simply generate en display a `Bitmap` for each `Chip` via an `ImageSpan`. Since `ImageSpan` can't handle click event, there are also a overlying `ClickSpan` for each `Chip`.
+### How does this work
+ChipTextView simply generate and display a `Bitmap` for each `Chip` via an `ImageSpan`. Since `ImageSpan` can't handle click event, there are also a overlying `ClickSpan` for each `Chip`.
 
 ### Improve it !
 Each suggestion and correction is welcome, do not hesitate !
