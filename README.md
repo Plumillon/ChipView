@@ -1,5 +1,5 @@
 # ChipTextView
-ChipTextView enables you to easily create [Chip](http://www.google.fr/design/spec/components/chips.html) like list on a TextView with optional click listener on each on chip.
+ChipTextView enables you to easily create [Chip](http://www.google.fr/design/spec/components/chips.html) list with optional click listener on each `Chip`.
 
 ChipTextView is highly customizable to the point you can control every Chip layout and background color individually.
 
@@ -13,7 +13,7 @@ Just add ChipTextView to your layout (or programmatically) :
         android:layout_height="wrap_content" />
 ```
 
-Then prepare your data, each item on the ChipTextView must implements the `Chip` interface, just to know what String to display (via the `getText()` method) :
+Then prepare your data, each item on the `ChipTextView` must implements the `Chip` interface, just to know what String to display (via the `getText()` method) :
 ```
 public class Tag extends Chip {
     private String mName;
