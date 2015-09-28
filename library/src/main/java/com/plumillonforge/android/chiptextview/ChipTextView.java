@@ -168,19 +168,6 @@ public class ChipTextView extends TextView {
     }
 
     /**
-     * Helper to convert dp to px
-     *
-     * @param dp
-     * @return float
-     */
-    public static float convertDpToPixel(float dp) {
-        DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
-        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-
-        return px;
-    }
-
-    /**
      * Helper to convert px to sp
      *
      * @param px
