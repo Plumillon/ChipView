@@ -133,9 +133,10 @@ If you need to customize your `Chip` individually, you can do so by overriding t
         }
     }
 ```
-The `Chip` falls back to default behaviour if you return 0.
-<br />
 <img src="https://raw.githubusercontent.com/Plumillon/ChipTextView/master/readme/custom.png" height="60px" />
+<br />
+<br />
+The `Chip` falls back to default behaviour if you return 0.
 
 ## Why ?
 ChipTextView is a personal need for one of my project, I decided to develop and distribute it because I couldn't find anything which matched what I was seeking.
