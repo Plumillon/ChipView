@@ -85,11 +85,13 @@ chipView.setChipBackgroundColorSelectedRes(R.color.green);
 
 Or remove the background completely with `setHasDefaultBackground`
 
-### Changing the Chip spacing and line spacing
+#### Changing the Chip spacing, line spacing and Chip padding
 * You can control the space between `Chip` with `setChipSpacing` (default is 4dp)
 * You can control the space between each line of `Chip` with `setChipLineSpacing` (default is 4dp)
+* You can control the top and bottom `Chip` padding with `setChipPadding` (default is 2dp)
+* You can control the left and right `Chip` padding with `setChipSidePadding` (default is 6dp)
 
-#### Changing the Chip layout
+#### Changing all the Chip layout
 If you want your own layout for all `Chip`, you can specify it :
 ```
 chipView.setChipLayoutRes(R.layout.chip_close);
