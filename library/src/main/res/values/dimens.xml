@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="chip_padding">2dp</dimen>
+    <dimen name="chip_side_padding">6dp</dimen>
+    <dimen name="chip_spacing">4dp</dimen>
+    <dimen name="chip_line_spacing">4dp</dimen>
+</resources>

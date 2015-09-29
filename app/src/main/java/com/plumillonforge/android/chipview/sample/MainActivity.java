@@ -1,14 +1,11 @@
-package com.plumillonforge.android.chiptextview.sample;
+package com.plumillonforge.android.chipview.sample;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 
-import com.plumillonforge.android.chiptextview.Chip;
-import com.plumillonforge.android.chiptextview.ChipTextView;
-import com.plumillonforge.android.chiptextview.OnChipClickListener;
-import com.plumillonforge.android.chiptextview.R;
+import com.plumillonforge.android.chipview.Chip;
+import com.plumillonforge.android.chipview.ChipView;
+import com.plumillonforge.android.chipview.OnChipClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +17,9 @@ public class MainActivity extends AppCompatActivity implements OnChipClickListen
     private List<Chip> mTagList1;
     private List<Chip> mTagList2;
 
-    private ChipTextView mTextChipDefault;
-    private ChipTextView mTextChipLayout;
-    private ChipTextView mTextChipOverride;
+    private ChipView mTextChipDefault;
+    private ChipView mTextChipLayout;
+    private ChipView mTextChipOverride;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +41,19 @@ public class MainActivity extends AppCompatActivity implements OnChipClickListen
         mTagList2.add(new Tag("adipiscing elit", 5));
 
         // Default ChipTextView
-        mTextChipDefault = (ChipTextView) findViewById(R.id.text_chip_default);
+        mTextChipDefault = (ChipView) findViewById(R.id.text_chip_default);
         mTextChipDefault.setChipList(mTagList1);
 
-        mTextChipLayout = (ChipTextView) findViewById(R.id.text_chip_layout);
+        // Custom layout and background colors
+        mTextChipLayout = (ChipView) findViewById(R.id.text_chip_layout);
         mTextChipLayout.setChipLayoutRes(R.layout.chip_close);
-        mTextChipLayout.setBackgroundColorRes(R.color.green);
+        mTextChipLayout.setChipBackgroundColorRes(R.color.light_green);
+        mTextChipLayout.setChipBackgroundColorSelectedRes(R.color.green);
         mTextChipLayout.setChipList(mTagList1);
         mTextChipLayout.setOnChipClickListener(this);
 
-        mTextChipOverride = (ChipTextView) findViewById(R.id.text_chip_override);
+        // Chip override
+        mTextChipOverride = (ChipView) findViewById(R.id.text_chip_override);
         mTextChipOverride.setChipList(mTagList2);
     }
 

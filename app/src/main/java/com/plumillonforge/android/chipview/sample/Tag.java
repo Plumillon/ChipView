@@ -1,9 +1,8 @@
-package com.plumillonforge.android.chiptextview.sample;
+package com.plumillonforge.android.chipview.sample;
 
 import android.os.Parcel;
 
-import com.plumillonforge.android.chiptextview.Chip;
-import com.plumillonforge.android.chiptextview.R;
+import com.plumillonforge.android.chipview.Chip;
 
 /**
  * Created by Plumillon Forge on 25/09/15.

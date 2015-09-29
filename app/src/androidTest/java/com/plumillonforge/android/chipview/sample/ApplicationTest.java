@@ -1,4 +1,4 @@
-package com.plumillonforge.android.chiptextview.library;
+package com.plumillonforge.android.chipview.sample;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
