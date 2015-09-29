@@ -78,7 +78,7 @@ You can change all the `Chip` background in one line :
 chipView.setBackgroundColorRes(R.color.light_green);
 ```
 
-If you got a click listener and what another color when clicked :
+If you got a click listener and want another color when clicked :
 ```
 chipView.setChipBackgroundColorSelectedRes(R.color.green);
 ```
