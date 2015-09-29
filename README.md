@@ -73,7 +73,7 @@ chipDefault.setOnChipClickListener(new OnChipClickListener() {
 If the default layout and backgroud color doesn't match your needs, you can override it in differents ways.
 
 #### Changing the background colors
-You can change all the `Chip` background in one line with differents methods :
+You can change all the `Chip` background in one line :
 ```
 chipView.setBackgroundColorRes(R.color.light_green);
 ```
