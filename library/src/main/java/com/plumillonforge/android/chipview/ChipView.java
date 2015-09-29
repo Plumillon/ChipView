@@ -118,7 +118,7 @@ public class ChipView extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int width = getMeasuredWidth();
-        int lineWidth = 0;
+        int lineWidth = getPaddingLeft();
         int childCount = getChildCount();
         int j = 0;
         int lineHeight = (mLineHeightList.size() > 0 ? mLineHeightList.get(j) : 0);
@@ -138,11 +138,11 @@ public class ChipView extends ViewGroup {
             if (childWidth > width)
                 width = childWidth;
 
-            if (lineWidth + childWidth > width) {
+            if (lineWidth + childWidth + getPaddingRight() > width) {
                 childY += lineHeight;
                 j++;
                 lineHeight = mLineHeightList.get(j);
-                lineWidth = childWidth;
+                lineWidth = getPaddingLeft() + childWidth;
             } else
                 lineWidth += childWidth;
 
