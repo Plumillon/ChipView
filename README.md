@@ -1,19 +1,19 @@
-# ChipTextView
-ChipTextView enables you to easily create [Chip](http://www.google.fr/design/spec/components/chips.html) list with optional click listener on each `Chip`.
+# ChipView
+ChipView enables you to easily create [Chip](http://www.google.fr/design/spec/components/chips.html) list with optional click listener on each `Chip`.
 
-ChipTextView is highly customizable to the point you can control every Chip layout and background color individually.
+ChipView is highly customizable to the point you can control every Chip layout and background colors (normal and selected) individually.
 
 ## How to use
 ### Default mode
-Just add ChipTextView to your layout (or programmatically) :
+Just add ChipView to your layout (or programmatically) :
 ```
-<com.plumillonforge.android.chiptextview.ChipTextView
-        android:id="@+id/text_chip"
+<com.plumillonforge.android.chipview.ChipView
+        android:id="@+id/chipview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 ```
 
-Then prepare your data, each item on the `ChipTextView` must implements the `Chip` interface, just to know what String to display (via the `getText()` method) :
+Then prepare your data, each item on the `ChipView` must implements the `Chip` interface, just to know what String to display (via the `getText()` method) :
 ```
 public class Tag extends Chip {
     private String mName;
@@ -43,7 +43,7 @@ public class Tag extends Chip {
     }
 }
 ```
-Now you're free to go by adding `Chip` to your `ChipTextView` :
+Now you're free to go by adding `Chip` to your `ChipView` :
 ```
 List<Chip> chipList = new ArrayList<>();
 chipList.add(new Tag("Lorem"));
@@ -51,12 +51,12 @@ chipList.add(new Tag("Ipsum dolor"));
 chipList.add(new Tag("Sit amet"));
 chipList.add(new Tag("Consectetur"));
 chipList.add(new Tag("adipiscing elit"));
-ChipTextView chipDefault = (ChipTextView) findViewById(R.id.text_chip);
+ChipView chipDefault = (ChipView) findViewById(R.id.chipview);
 chipDefault.setChipList(chipList);
 ```
-ChipTextView will be displayed with default settings :
+ChipView will be displayed with default settings :
 <br />
-<img src="https://raw.githubusercontent.com/Plumillon/ChipTextView/master/readme/default.png" height="60px" />
+<img src="https://raw.githubusercontent.com/Plumillon/ChipView/master/readme/default.png" height="60px" />
 
 ### Click listener
 If you want to register a listener when a `Chip` is clicked, implement `OnChipClickListener` :
@@ -72,30 +72,40 @@ chipDefault.setOnChipClickListener(new OnChipClickListener() {
 ### More layout control
 If the default layout and backgroud color doesn't match your needs, you can override it in differents ways.
 
-#### Setting android:textSize
-Each `Chip` will reflect the `android:textSize` ChipTextView property
-
-#### Changing the background color
+#### Changing the background colors
 You can change all the `Chip` background in one line with differents methods :
 ```
-chipTextView.setBackgroundColorRes(R.color.green);
-chipTextView.setBackgroundColorHex("#4CAF50");
+chipView.setBackgroundColorRes(R.color.light_green);
 ```
-Or remove it completely with `setHasDefaultBackground`
+
+If you got a click listener and what another color when clicked :
+```
+chipView.setChipBackgroundColorSelectedRes(R.color.green);
+```
+
+Or remove the background completely with `setHasDefaultBackground`
+
+### Changing the Chip spacing and line spacing
+* You can control the space between `Chip` with `setChipSpacing` (default is 4dp)
+* You can control the space between each line of `Chip` with `setChipLineSpacing` (default is 4dp)
 
 #### Changing the Chip layout
 If you want your own layout for all `Chip`, you can specify it :
 ```
-chipTextView.setChipLayoutRes(R.layout.chip_close);
+chipView.setChipLayoutRes(R.layout.chip_close);
 ```
 **A `TextView` with `android:id="@android:id/text1"` is mandatory in the layout**
 
 The background is set on the layout root `View` by default, if you need to place the background on a specific `View` on the layout, please provide a `android:id="@android:id/content"`.
 <br />
-<img src="https://raw.githubusercontent.com/Plumillon/ChipTextView/master/readme/control.png" height="60px" />
+<img src="https://raw.githubusercontent.com/Plumillon/ChipView/master/readme/control.png" height="60px" />
 
-#### Controlling layout and  background color individually
-If you need to customize your `Chip` individually, you can do so by overriding the `Chip` `getLayoutRes()` and `getBackgroundColorRes()` methods :
+##### Chip spacing and line spacing rules
+* If the layout doesn't got a right margin, we fall back to `ChipView` Chip spacing
+* If the layout doesn't got a bottom margin, we fall back to `ChipView` Chip line spacing
+
+#### Controlling layout and  background colors individually
+If you need to customize your `Chip` individually, you can do so by overriding the `Chip` `getLayoutRes()`, `getBackgroundColorRes()` and `getBackgroundColorSelectedRes()` methods :
 ```
     @Override
     public int getLayoutRes() {
@@ -133,22 +143,22 @@ If you need to customize your `Chip` individually, you can do so by overriding t
         }
     }
 ```
-<img src="https://raw.githubusercontent.com/Plumillon/ChipTextView/master/readme/custom.png" height="60px" />
+<img src="https://raw.githubusercontent.com/Plumillon/ChipView/master/readme/custom.png" height="60px" />
 <br />
 <br />
-The `Chip` falls back to default behaviour if you return 0.
+The `Chip` falls back to `ChipView` overall behaviour if you return 0.
 
 ## Why ?
-ChipTextView is a personal need for one of my project, I decided to develop and distribute it because I couldn't find anything which matched what I was seeking.
+ChipView is a personal need for one of my project, I decided to develop and distribute it because I couldn't find anything which matched what I was seeking.
 
 ### How does this work
-ChipTextView simply generate and display a `Bitmap` for each `Chip` via an `ImageSpan`. Since `ImageSpan` can't handle click event, there are also a overlying `ClickSpan` for each `Chip`.
+ChipView extends `ViewGroup` and will contain each `Chip` as his child view.
 
 ### Improve it !
 Each suggestion and correction is welcome, do not hesitate !
 
 ## Licensing
-ChipTextView is published with [Apache Licence](http://www.apache.org/licenses/LICENSE-2.0)
+ChipView is published with [Apache Licence](http://www.apache.org/licenses/LICENSE-2.0)
 
 ## How tenacious
-You read it to the extra end ! Congratulations, here is a [potato](https://raw.githubusercontent.com/Plumillon/ChipTextView/master/readme/potato.jpg) :)
+You read it to the extra end ! Congratulations, here is a [potato](https://raw.githubusercontent.com/Plumillon/ChipView/master/readme/potato.jpg) :)
