@@ -83,7 +83,7 @@ If you got a click listener and want another color when clicked :
 chipView.setChipBackgroundColorSelectedRes(R.color.green);
 ```
 
-Or remove the background completely with `setHasDefaultBackground`
+Or remove the background completely with `setHasBackground`
 
 #### Changing the Chip spacing, line spacing and Chip padding
 * You can control the space between `Chip` with `setChipSpacing` (default is 4dp)
