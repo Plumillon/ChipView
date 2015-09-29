@@ -37,7 +37,7 @@ public class ChipView extends ViewGroup {
     private int mChipBackgroundColorSelectedRes;
     private int mChipBackgroundRes;
     private OnChipClickListener mListener;
-    private boolean mHasDefaultBackground = true;
+    private boolean mHasBackground = true;
 
     // Data
     private List<Integer> mLineHeightList;
@@ -217,7 +217,7 @@ public class ChipView extends ViewGroup {
                     text.setGravity(Gravity.CENTER);
                 }
 
-                if (mHasDefaultBackground) {
+                if (mHasBackground) {
                     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         if (content != null)
                             content.setBackgroundDrawable(chipBackground);
@@ -375,12 +375,12 @@ public class ChipView extends ViewGroup {
         mToleratingDuplicate = toleratingDuplicate;
     }
 
-    public boolean hasDefaultBackground() {
-        return mHasDefaultBackground;
+    public boolean hasBackground() {
+        return mHasBackground;
     }
 
-    public void setHasDefaultBackground(boolean hasDefaultBackground) {
-        mHasDefaultBackground = hasDefaultBackground;
+    public void setHasBackground(boolean hasBackground) {
+        mHasBackground = hasBackground;
     }
 
     public int getChipSpacing() {
