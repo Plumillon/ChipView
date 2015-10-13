@@ -55,6 +55,7 @@ ChipView will be displayed with default settings :
 
 ### ChipView adapter
 The ChipView library uses an adapter to display his data, he creates a default one if you don't specify yours.
+
 The `ChipView` class is also a wrapper to his current adapter to simplify adapter methods call.
 
 If you want to provide your own implementation of adapter, just extend `ChipViewAdapter` :
@@ -243,14 +244,14 @@ The adapter got a `onLayout` method where you can manipulate each `Chip` `View`,
 ## How to use
 ### Gradle
 You can include `ChipView` in your Gradle dependencies via [JitPack](https://jitpack.io/#Plumillon/ChipView).
-Example for the 1.1.1 release :
+Example for the 1.1.2 release :
 ```
 repositories {
         maven { url "https://jitpack.io" }
 }
 
 dependencies {
-        compile 'com.github.Plumillon:ChipView:1.1.1'
+        compile 'com.github.Plumillon:ChipView:1.1.2'
 }
 ```
 
@@ -262,7 +263,8 @@ ChipView is a personal need for one of my project, I decided to develop and dist
 
 ### How does this work
 ChipView extends `ViewGroup` and will contain each `Chip` as his child view.
-His data and Views are driven by his adapter which can be a default one if not specified. For 
+
+His data and Views are driven by his adapter which can be a default one if not specified.
 
 ### Improve it !
 Each suggestion and correction is welcome, do not hesitate !
