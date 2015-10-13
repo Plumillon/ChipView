@@ -15,8 +15,9 @@ Just add ChipView to your layout (or programmatically) :
 
 Then prepare your data, each item on the `ChipView` must implements the `Chip` interface, just to know what String to display (via the `getText()` method) :
 ```
-public class Tag extends Chip {
+public class Tag implements Chip {
     private String mName;
+    private int mType = 0;
 
     public Tag(String name, int type) {
         this(name);
@@ -31,15 +32,9 @@ public class Tag extends Chip {
     public String getText() {
         return mName;
     }
-        
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
+    
+    public int getType() {
+        return mType;
     }
 }
 ```
@@ -58,6 +53,83 @@ ChipView will be displayed with default settings :
 <br />
 <img src="https://raw.githubusercontent.com/Plumillon/ChipView/master/readme/default.png" height="60px" />
 
+### ChipView adapter
+The ChipView library uses an adapter to display his data, he creates a default one if you don't specify yours.
+The `ChipView` class is also a wrapper to his current adapter to simplify adapter methods call.
+
+If you want to provide your own implementation of adapter, just extend `ChipViewAdapter` :
+```
+public class MainChipViewAdapter extends ChipViewAdapter {
+    public MainChipViewAdapter(Context context) {
+        super(context);
+    }
+
+    @Override
+    public int getLayoutRes(int position) {
+        Tag tag = (Tag) getChip(position);
+
+        switch (tag.getType()) {
+            default:
+            case 2:
+            case 4:
+                return 0;
+
+            case 1:
+            case 5:
+                return R.layout.chip_double_close;
+
+            case 3:
+                return R.layout.chip_close;
+        }
+    }
+
+    @Override
+    public int getBackgroundColor(int position) {
+        Tag tag = (Tag) getChip(position);
+
+        switch (tag.getType()) {
+            default:
+                return 0;
+
+            case 1:
+            case 4:
+                return getColor(R.color.blue);
+
+            case 2:
+            case 5:
+                return getColor(R.color.purple);
+
+            case 3:
+                return getColor(R.color.teal);
+        }
+    }
+
+    @Override
+    public int getBackgroundColorSelected(int position) {
+        return 0;
+    }
+
+    @Override
+    public int getBackgroundRes(int position) {
+        return 0;
+    }
+
+    @Override
+    public void onLayout(View view, int position) {
+        Tag tag = (Tag) getChip(position);
+
+        if (tag.getType() == 2)
+            ((TextView) view.findViewById(android.R.id.text1)).setTextColor(getColor(R.color.blue));
+    }
+```
+
+And set the `ChipView` adapter :
+```
+ChipViewAdapter adapter = new MainChipViewAdapter(this);
+chipView.setAdapter(adapter)
+```
+**Since `ChipView` is creating his own default adapter, don't forget to set your adapter before anything else to avoid manipulating the wrong adapter**
+
 ### Click listener
 If you want to register a listener when a `Chip` is clicked, implement `OnChipClickListener` :
 ```
@@ -75,12 +147,17 @@ If the default layout and backgroud color doesn't match your needs, you can over
 #### Changing the background colors
 You can change all the `Chip` background in one line :
 ```
-chipView.setBackgroundColorRes(R.color.light_green);
+chipView.setBackgroundColor(getResources().getColor(R.color.light_green));
 ```
 
 If you got a click listener and want another color when clicked :
 ```
-chipView.setChipBackgroundColorSelectedRes(R.color.green);
+chipView.setChipBackgroundColorSelected(getResources().getColor(R.color.green));
+```
+
+Or if you prefer to control the click color feedback with your own selector :
+```
+chipView.setChipBackgroundRes(R.drawable.chipview_selector);
 ```
 
 Or remove the background completely with `setHasBackground`
@@ -92,7 +169,7 @@ Or remove the background completely with `setHasBackground`
 * You can control the left and right `Chip` padding with `setChipSidePadding` (default is 6dp)
 
 #### Changing all the Chip layout
-If you want your own layout for all `Chip`, you can specify it :
+If you want your own layout for all `Chip`, you can specify it in your adapter (or via the `ChipView` proxy method) :
 ```
 chipView.setChipLayoutRes(R.layout.chip_close);
 ```
@@ -107,7 +184,7 @@ The background is set on the layout root `View` by default, if you need to place
 * If the layout doesn't got a bottom margin, we fall back to `ChipView` Chip line spacing
 
 #### Controlling layout and  background colors individually
-If you need to customize your `Chip` individually, you can do so by overriding the `Chip` `getLayoutRes()`, `getBackgroundColorRes()` and `getBackgroundColorSelectedRes()` methods :
+If you need to customize your `Chip` individually, you can do so by overriding your `ChipViewAdapter` `getLayoutRes()`, `getBackgroundColorRes()` and `getBackgroundColorSelectedRes()` methods :
 ```
     @Override
     public int getLayoutRes() {
@@ -150,11 +227,25 @@ If you need to customize your `Chip` individually, you can do so by overriding t
 <br />
 The `Chip` falls back to `ChipView` overall behaviour if you return 0.
 
+#### Last chance to modify your layout
+The adapter got a `onLayout` method where you can manipulate each `Chip` `View`, this is the last place where you will be able to add logic to change the `View` itself :
+
+```
+    @Override
+    public void onLayout(View view, int position) {
+        Tag tag = (Tag) getChip(position);
+
+        if (tag.getType() == 2)
+            ((TextView) view.findViewById(android.R.id.text1)).setTextColor(getColor(R.color.blue));
+    }
+```
+
 ## Why ?
 ChipView is a personal need for one of my project, I decided to develop and distribute it because I couldn't find anything which matched what I was seeking.
 
 ### How does this work
 ChipView extends `ViewGroup` and will contain each `Chip` as his child view.
+His data and Views are driven by his adapter which can be a default one if not specified. For 
 
 ### Improve it !
 Each suggestion and correction is welcome, do not hesitate !
