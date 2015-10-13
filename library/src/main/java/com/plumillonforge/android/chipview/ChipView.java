@@ -2,70 +2,72 @@ package com.plumillonforge.android.chipview;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.StateListDrawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.StateSet;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.plumillonforge.android.chipview.library.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Plumillon Forge on 17/09/15.
  */
-public class ChipView extends ViewGroup {
-    private int mChipSpacing;
-    private int mLineSpacing;
-    private int mChipPadding;
-    private int mChipSidePadding;
-    private List<Chip> mChipList;
-    private int mChipRes;
-    private boolean mToleratingDuplicate = false;
-    private int mChipBackgroundColorRes;
-    private int mChipBackgroundColorSelectedRes;
-    private int mChipBackgroundRes;
+public class ChipView extends ViewGroup implements Observer {
+    private ChipViewAdapter mAdapter;
     private OnChipClickListener mListener;
-    private boolean mHasBackground = true;
 
     // Data
     private List<Integer> mLineHeightList;
 
     public ChipView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public ChipView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public ChipView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
-    private void init() {
-        mChipList = new ArrayList<>();
+    private void init(Context context) {
         mLineHeightList = new ArrayList<>();
-        mChipSpacing = (int) getResources().getDimension(R.dimen.chip_spacing);
-        mLineSpacing = (int) getResources().getDimension(R.dimen.chip_line_spacing);
-        mChipPadding = (int) getResources().getDimension(R.dimen.chip_padding);
-        mChipSidePadding = (int) getResources().getDimension(R.dimen.chip_side_padding);
-        mChipBackgroundColorRes = R.color.chip_background;
-        mChipBackgroundColorSelectedRes = R.color.chip_background_selected;
+        setAdapter(new ChipViewAdapter(context) {
+            @Override
+            public int getLayoutRes(int position) {
+                return 0;
+            }
+
+            @Override
+            public int getBackgroundRes(int position) {
+                return 0;
+            }
+
+            @Override
+            public int getBackgroundColor(int position) {
+                return 0;
+            }
+
+            @Override
+            public int getBackgroundColorSelected(int position) {
+                return 0;
+            }
+
+            @Override
+            public void onLayout(View view, int position) {
+
+            }
+        });
     }
 
     @Override
@@ -117,46 +119,48 @@ public class ChipView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int width = getMeasuredWidth();
-        int lineWidth = getPaddingLeft();
-        int childCount = getChildCount();
-        int j = 0;
-        int lineHeight = (mLineHeightList.size() > 0 ? mLineHeightList.get(j) : 0);
-        int childY = getPaddingTop();
+        if (mAdapter != null) {
+            int width = getMeasuredWidth();
+            int lineWidth = getPaddingLeft();
+            int childCount = getChildCount();
+            int j = 0;
+            int lineHeight = (mLineHeightList.size() > 0 ? mLineHeightList.get(j) : 0);
+            int childY = getPaddingTop();
 
-        for (int i = 0; i < childCount; i++) {
-            final Chip chip = mChipList.get(i);
-            View childView = getChildAt(i);
-            MarginLayoutParams layoutParams = (MarginLayoutParams) childView.getLayoutParams();
+            for (int i = 0; i < childCount; i++) {
+                final Chip chip = mAdapter.getChipList().get(i);
+                View childView = getChildAt(i);
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) childView.getLayoutParams();
 
-            if (childView.getVisibility() == GONE)
-                continue;
+                if (childView.getVisibility() == View.GONE)
+                    continue;
 
-            int childWidth = (childView.getMeasuredWidth() + layoutParams.leftMargin + layoutParams.rightMargin);
-            int childHeight = (childView.getMeasuredHeight() + layoutParams.topMargin + layoutParams.bottomMargin);
+                int childWidth = (childView.getMeasuredWidth() + layoutParams.leftMargin + layoutParams.rightMargin);
+                int childHeight = (childView.getMeasuredHeight() + layoutParams.topMargin + layoutParams.bottomMargin);
 
-            if (childWidth > width)
-                width = childWidth;
+                if (childWidth > width)
+                    width = childWidth;
 
-            if (lineWidth + childWidth + getPaddingRight() > width) {
-                childY += lineHeight;
-                j++;
-                lineHeight = mLineHeightList.get(j);
-                lineWidth = getPaddingLeft() + childWidth;
-            } else
-                lineWidth += childWidth;
+                if (lineWidth + childWidth + getPaddingRight() > width) {
+                    childY += lineHeight;
+                    j++;
+                    lineHeight = mLineHeightList.get(j);
+                    lineWidth = getPaddingLeft() + childWidth;
+                } else
+                    lineWidth += childWidth;
 
-            int childX = lineWidth - childWidth;
+                int childX = lineWidth - childWidth;
 
-            childView.layout((childX + layoutParams.leftMargin), (childY + layoutParams.topMargin), (lineWidth - layoutParams.rightMargin), (childY + childHeight - layoutParams.bottomMargin));
+                childView.layout((childX + layoutParams.leftMargin), (childY + layoutParams.topMargin), (lineWidth - layoutParams.rightMargin), (childY + childHeight - layoutParams.bottomMargin));
 
-            if (mListener != null) {
-                childView.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mListener.onChipClick(chip);
-                    }
-                });
+                if (mListener != null) {
+                    childView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mListener.onChipClick(chip);
+                        }
+                    });
+                }
             }
         }
     }
@@ -177,96 +181,24 @@ public class ChipView extends ViewGroup {
     }
 
     public void refresh() {
-        removeAllViews();
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (mAdapter != null) {
+            removeAllViews();
 
-        for (Chip chip : mChipList) {
-            View view = null;
-            int chipLayoutRes = (chip.getLayoutRes() != 0 ? chip.getLayoutRes() : getChipLayoutRes());
-            Drawable chipBackground = generateBackgroundSelector(chip);
+            for (int i = 0; i < mAdapter.count(); i++) {
+                View view = mAdapter.getView(this, i);
 
-            if (chipLayoutRes == 0) {
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0, 0, mChipSpacing, mLineSpacing);
-                view = new LinearLayout(getContext());
-                view.setLayoutParams(layoutParams);
-                ((LinearLayout) view).setOrientation(LinearLayout.HORIZONTAL);
-                ((LinearLayout) view).setGravity(Gravity.CENTER_VERTICAL);
-                view.setPadding(mChipSidePadding, mChipPadding, mChipSidePadding, mChipPadding);
-
-                TextView text = new TextView(getContext());
-                text.setId(android.R.id.text1);
-                ((LinearLayout) view).addView(text);
-
-                if (mListener != null) {
-                    view.setClickable(true);
-                    view.setFocusable(true);
-                }
-            } else {
-                view = inflater.inflate(chipLayoutRes, this, false);
-                MarginLayoutParams layoutParams = (MarginLayoutParams) view.getLayoutParams();
-                layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, (layoutParams.rightMargin > 0 ? layoutParams.rightMargin : mChipSpacing), (layoutParams.bottomMargin > 0 ? layoutParams.bottomMargin : mLineSpacing));
-            }
-
-            if (view != null) {
-                TextView text = (TextView) view.findViewById(android.R.id.text1);
-                View content = view.findViewById(android.R.id.content);
-
-                if (text != null) {
-                    text.setText(chip.getText());
-                    text.setGravity(Gravity.CENTER);
-                }
-
-                if (mHasBackground) {
-                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        if (content != null)
-                            content.setBackgroundDrawable(chipBackground);
-                        else
-                            view.setBackgroundDrawable(chipBackground);
-                    } else {
-                        if (content != null)
-                            content.setBackground(chipBackground);
-                        else
-                            view.setBackground(chipBackground);
+                if (view != null) {
+                    if (mListener != null) {
+                        view.setClickable(true);
+                        view.setFocusable(true);
                     }
+
+                    addView(view);
                 }
-
-                addView(view);
             }
+
+            invalidate();
         }
-
-        invalidate();
-    }
-
-    private Drawable generateBackgroundSelector(Chip chip) {
-        if (chip.getBackgroundRes() != 0)
-            return getResources().getDrawable(chip.getBackgroundRes());
-        else if (mChipBackgroundRes != 0) {
-            return getResources().getDrawable(mChipBackgroundRes);
-        }
-
-        int backgroundColorRes = (chip.getBackgroundColorRes() != 0 ? chip.getBackgroundColorRes() : mChipBackgroundColorRes);
-        int backgroundColorSelectedRes = (chip.getBackgroundColorSelectedRes() != 0 ? chip.getBackgroundColorSelectedRes() : mChipBackgroundColorSelectedRes);
-
-        // Default state
-        GradientDrawable background = new GradientDrawable();
-        background.setShape(GradientDrawable.RECTANGLE);
-        background.setCornerRadius(100);
-        background.setColor(getResources().getColor(backgroundColorRes));
-
-        // Selected state
-        GradientDrawable selectedBackground = selectedBackground = new GradientDrawable();
-        selectedBackground.setShape(GradientDrawable.RECTANGLE);
-        selectedBackground.setCornerRadius(100);
-        selectedBackground.setColor(getResources().getColor(backgroundColorSelectedRes));
-
-
-        StateListDrawable stateListDrawable = new StateListDrawable();
-        stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, selectedBackground);
-        stateListDrawable.addState(new int[]{android.R.attr.state_focused}, selectedBackground);
-        stateListDrawable.addState(StateSet.WILD_CARD, background);
-
-        return stateListDrawable;
     }
 
     /**
@@ -297,10 +229,7 @@ public class ChipView extends ViewGroup {
      * @param chip
      */
     public void add(Chip chip) {
-        if (!mChipList.contains(chip) || mToleratingDuplicate) {
-            mChipList.add(chip);
-            refresh();
-        }
+        mAdapter.add(chip);
     }
 
     /**
@@ -309,8 +238,7 @@ public class ChipView extends ViewGroup {
      * @param chip
      */
     public void remove(Chip chip) {
-        mChipList.remove(chip);
-        refresh();
+        mAdapter.remove(chip);
     }
 
     /**
@@ -319,15 +247,25 @@ public class ChipView extends ViewGroup {
      * @return int
      */
     public int count() {
-        return mChipList.size();
+        return mAdapter.count();
     }
 
     public List<Chip> getChipList() {
-        return mChipList;
+        return mAdapter.getChipList();
     }
 
     public void setChipList(List<Chip> chipList) {
-        mChipList = chipList;
+        mAdapter.setChipList(chipList);
+    }
+
+    public ChipViewAdapter getAdapter() {
+        return mAdapter;
+    }
+
+    public void setAdapter(ChipViewAdapter adapter) {
+        mAdapter = adapter;
+        mAdapter.deleteObservers();
+        mAdapter.addObserver(this);
         refresh();
     }
 
@@ -338,11 +276,11 @@ public class ChipView extends ViewGroup {
      * @param backgroundRes
      */
     public void setChipBackgroundRes(@DrawableRes int backgroundRes) {
-        mChipBackgroundRes = backgroundRes;
+        mAdapter.setChipBackgroundRes(backgroundRes);
     }
 
     public int getChipLayoutRes() {
-        return mChipRes;
+        return mAdapter.getChipLayoutRes();
     }
 
     /**
@@ -350,7 +288,7 @@ public class ChipView extends ViewGroup {
      * Can be fine tuned by overriding @see com.scanners.android.bao.view.ChipTextView.Chip#getLayoutRes
      */
     public void setChipLayoutRes(@LayoutRes int chipRes) {
-        mChipRes = chipRes;
+        mAdapter.setChipLayoutRes(chipRes);
     }
 
     /**
@@ -363,7 +301,7 @@ public class ChipView extends ViewGroup {
     }
 
     public boolean isToleratingDuplicate() {
-        return mToleratingDuplicate;
+        return mAdapter.isToleratingDuplicate();
     }
 
     /**
@@ -372,62 +310,75 @@ public class ChipView extends ViewGroup {
      * @param toleratingDuplicate
      */
     public void setToleratingDuplicate(boolean toleratingDuplicate) {
-        mToleratingDuplicate = toleratingDuplicate;
+        mAdapter.setToleratingDuplicate(toleratingDuplicate);
     }
 
     public boolean hasBackground() {
-        return mHasBackground;
+        return mAdapter.hasBackground();
     }
 
     public void setHasBackground(boolean hasBackground) {
-        mHasBackground = hasBackground;
+        mAdapter.setHasBackground(hasBackground);
     }
 
     public int getChipSpacing() {
-        return mChipSpacing;
+        return mAdapter.getChipSpacing();
     }
 
     public void setChipSpacing(int chipSpacing) {
-        mChipSpacing = chipSpacing;
+        mAdapter.setChipSpacing(chipSpacing);
     }
 
     public int getLineSpacing() {
-        return mLineSpacing;
+        return mAdapter.getLineSpacing();
     }
 
     public void setLineSpacing(int lineSpacing) {
-        mLineSpacing = lineSpacing;
+        mAdapter.setLineSpacing(lineSpacing);
     }
-    
+
     public int getChipPadding() {
-        return mChipPadding;
+        return mAdapter.getChipPadding();
     }
 
     public void setChipPadding(int chipPadding) {
-        mChipPadding = chipPadding;
+        mAdapter.setChipPadding(chipPadding);
     }
 
     public int getChipSidePadding() {
-        return mChipSidePadding;
+        return mAdapter.getChipSidePadding();
     }
 
     public void setChipSidePadding(int chipSidePadding) {
-        mChipSidePadding = chipSidePadding;
+        mAdapter.setChipSidePadding(chipSidePadding);
     }
 
-    public int getChipBackgroundColorRes() {
-        return mChipBackgroundColorRes;
+    public int getChipBackgroundColor() {
+        return mAdapter.getChipBackgroundColor();
     }
 
-    public void setChipBackgroundColorRes(int chipBackgroundColorRes) {
-        mChipBackgroundColorRes = chipBackgroundColorRes;
+    public void setChipBackgroundColor(@ColorInt int chipBackgroundColor) {
+        mAdapter.setChipBackgroundColor(chipBackgroundColor);
     }
 
-    public int getChipBackgroundColorSelectedRes() {
-        return mChipBackgroundColorSelectedRes;
+    public int getChipBackgroundColorSelected() {
+        return mAdapter.getChipBackgroundColorSelected();
     }
 
-    public void setChipBackgroundColorSelectedRes(int chipBackgroundColorSelectedRes) {
-        mChipBackgroundColorSelectedRes = chipBackgroundColorSelectedRes;
+    public void setChipBackgroundColorSelected(@ColorInt int chipBackgroundColorSelected) {
+        mAdapter.setChipBackgroundColorSelected(chipBackgroundColorSelected);
+    }
+
+    public int getChipTextSize() {
+        return mAdapter.getChipTextSize();
+    }
+
+    public void setChipTextSize(int chipTextSize) {
+        mAdapter.setChipTextSize(chipTextSize);
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        refresh();
     }
 }
