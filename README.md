@@ -243,14 +243,14 @@ The adapter got a `onLayout` method where you can manipulate each `Chip` `View`,
 ## How to use
 ### Gradle
 You can include `ChipView` in your Gradle dependencies via [JitPack](https://jitpack.io/#Plumillon/ChipView).
-Example for the 1.1.0 release :
+Example for the 1.1.1 release :
 ```
 repositories {
         maven { url "https://jitpack.io" }
 }
 
 dependencies {
-        compile 'com.github.Plumillon:ChipView:1.1.0'
+        compile 'com.github.Plumillon:ChipView:1.1.1'
 }
 ```
 
