@@ -33,8 +33,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.plumillonforge.android.chipview.library.R;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
