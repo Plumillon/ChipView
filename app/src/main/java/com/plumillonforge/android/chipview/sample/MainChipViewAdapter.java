@@ -2,12 +2,13 @@ package com.plumillonforge.android.chipview.sample;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.TextView;
 
 import com.plumillonforge.android.chipview.Chip;
 import com.plumillonforge.android.chipview.ChipViewAdapter;
 
 /**
- * Created by Flavien on 09/10/15.
+ * Created by Plumillon Forge on 09/10/15.
  */
 public class MainChipViewAdapter extends ChipViewAdapter {
     public MainChipViewAdapter(Context context) {
@@ -66,6 +67,9 @@ public class MainChipViewAdapter extends ChipViewAdapter {
 
     @Override
     public void onLayout(View view, int position) {
+        Tag tag = (Tag) getChip(position);
 
+        if (tag.getType() == 2)
+            ((TextView) view.findViewById(android.R.id.text1)).setTextColor(getColor(R.color.blue));
     }
 }
