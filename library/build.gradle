@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion COMPILE_SDK_VERSION
@@ -18,7 +19,46 @@ android {
     }
 }
 
+configurations {
+    javadocDep
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
+    javadocDep "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
 }
+
+// build a jar with source files
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    failOnError  false
+    source = android.sourceSets.main.java.sourceFiles
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.javadocDep
+}
+
+// build a jar with javadoc
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+// uncomment to build a jar file in addition to the default aar file
+//android.libraryVariants.all { variant ->
+//    def name = variant.buildType.name
+//    def task = project.tasks.create "jar${name.capitalize()}", Jar
+//    task.dependsOn variant.javaCompile
+//    task.from variant.javaCompile.destinationDir
+//    artifacts.add('archives', task);
+//}
