@@ -185,11 +185,15 @@ The background is set on the layout root `View` by default, if you need to place
 * If the layout doesn't got a bottom margin, we fall back to `ChipView` Chip line spacing
 
 #### Controlling layout and  background colors individually
-If you need to customize your `Chip` individually, you can do so by overriding your `ChipViewAdapter` `getLayoutRes()`, `getBackgroundColorRes()` and `getBackgroundColorSelectedRes()` methods :
+If you need to customize your `Chip` individually, you can do so by overriding your `ChipViewAdapter` `getLayoutRes(int position)`, `getBackgroundColor(int position)` and `getBackgroundColorSelected(int position)` methods.
+
+For example :
 ```
     @Override
-    public int getLayoutRes() {
-        switch (mType) {
+    public int getLayoutRes(int position) {
+        Tag tag = (Tag) getChip(position);
+
+        switch (tag.getType()) {
             default:
             case 2:
             case 4:
@@ -203,23 +207,25 @@ If you need to customize your `Chip` individually, you can do so by overriding y
                 return R.layout.chip_close;
         }
     }
-
+    
     @Override
-    public int getBackgroundColorRes() {
-        switch (mType) {
+    public int getBackgroundColor(int position) {
+        Tag tag = (Tag) getChip(position);
+
+        switch (tag.getType()) {
             default:
                 return 0;
 
             case 1:
             case 4:
-                return R.color.blue;
+                return getColor(R.color.blue);
 
             case 2:
             case 5:
-                return R.color.purple;
+                return getColor(R.color.purple);
 
             case 3:
-                return R.color.teal;
+                return getColor(R.color.teal);
         }
     }
 ```
