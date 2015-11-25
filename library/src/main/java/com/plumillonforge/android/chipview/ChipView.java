@@ -95,7 +95,7 @@ public class ChipView extends ViewGroup implements Observer {
         int width = getMeasuredWidth();
         int height = getPaddingTop() + getPaddingBottom();
         int lineHeight = 0;
-        int lineWidth = 0;
+        int lineWidth = getPaddingLeft();
         int childCount = getChildCount();
 
         for (int i = 0; i < childCount; i++) {
@@ -117,9 +117,9 @@ public class ChipView extends ViewGroup implements Observer {
             if (childWidth > width)
                 width = childWidth;
 
-            if (lineWidth + childWidth > width) {
+            if (lineWidth + childWidth + getPaddingRight() > width) {
                 mLineHeightList.add(lineHeight);
-                lineWidth = childWidth;
+                lineWidth = getPaddingLeft() + childWidth;
             } else
                 lineWidth += childWidth;
 
