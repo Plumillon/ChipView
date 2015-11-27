@@ -45,6 +45,7 @@ public abstract class ChipViewAdapter extends Observable {
     private int mChipSpacing;
     private int mLineSpacing;
     private int mChipPadding;
+    private int mChipCornerRadius;
     private int mChipSidePadding;
     private int mChipTextSize;
     private int mChipRes;
@@ -101,10 +102,11 @@ public abstract class ChipViewAdapter extends Observable {
     }
 
     private void init() {
-        mChipSpacing = (int) mContext.getResources().getDimension(R.dimen.chip_spacing);
-        mLineSpacing = (int) mContext.getResources().getDimension(R.dimen.chip_line_spacing);
-        mChipPadding = (int) mContext.getResources().getDimension(R.dimen.chip_padding);
-        mChipSidePadding = (int) mContext.getResources().getDimension(R.dimen.chip_side_padding);
+        mChipSpacing = mContext.getResources().getDimensionPixelSize(R.dimen.chip_spacing);
+        mLineSpacing = mContext.getResources().getDimensionPixelSize(R.dimen.chip_line_spacing);
+        mChipPadding = mContext.getResources().getDimensionPixelSize(R.dimen.chip_padding);
+        mChipSidePadding = mContext.getResources().getDimensionPixelSize(R.dimen.chip_side_padding);
+        mChipCornerRadius = mContext.getResources().getDimensionPixelSize(R.dimen.chip_corner_radius);
         mChipBackgroundColor = mContext.getResources().getColor(R.color.chip_background);
         mChipBackgroundColorSelected = mContext.getResources().getColor(R.color.chip_background_selected);
     }
@@ -181,13 +183,13 @@ public abstract class ChipViewAdapter extends Observable {
         // Default state
         GradientDrawable background = new GradientDrawable();
         background.setShape(GradientDrawable.RECTANGLE);
-        background.setCornerRadius(100);
+        background.setCornerRadius(mChipCornerRadius);
         background.setColor(backgroundColor);
 
         // Selected state
         GradientDrawable selectedBackground = new GradientDrawable();
         selectedBackground.setShape(GradientDrawable.RECTANGLE);
-        selectedBackground.setCornerRadius(100);
+        selectedBackground.setCornerRadius(mChipCornerRadius);
         selectedBackground.setColor(backgroundColorSelected);
 
         StateListDrawable stateListDrawable = new StateListDrawable();
@@ -306,6 +308,14 @@ public abstract class ChipViewAdapter extends Observable {
 
     public void setChipSidePadding(int chipSidePadding) {
         mChipSidePadding = chipSidePadding;
+    }
+
+    public int getChipCornerRadius(int chipCornerRadius) {
+        return mChipCornerRadius;
+    }
+
+    public void setChipCornerRadius(int chipCornerRadius) {
+        mChipCornerRadius = chipCornerRadius;
     }
 
     public int getChipBackgroundColor() {
