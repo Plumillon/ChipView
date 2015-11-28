@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ChipTextView</string>
     <string name="default_chip">Default</string>
+    <string name="attrs_chip">With custom XML attributes</string>
     <string name="with_layout">With overall layout res, background color and click listener</string>
     <string name="with_override">With overrided ChipViewAdapter getLayoutRes and getBackgroundColor</string>
 </resources>

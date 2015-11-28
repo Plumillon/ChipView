@@ -43,22 +43,22 @@ public class ChipView extends ViewGroup implements Observer {
 
     public ChipView(Context context) {
         super(context);
-        init(context);
+        init(context, null);
     }
 
     public ChipView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context, attrs);
     }
 
     public ChipView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init(context, attrs);
     }
 
-    private void init(Context context) {
+    private void init(Context context, AttributeSet attrs) {
         mLineHeightList = new ArrayList<>();
-        setAdapter(new ChipViewAdapter(context) {
+        setAdapter(new ChipViewAdapter(context, attrs) {
             @Override
             public int getLayoutRes(int position) {
                 return 0;
@@ -367,6 +367,14 @@ public class ChipView extends ViewGroup implements Observer {
 
     public void setChipSidePadding(int chipSidePadding) {
         mAdapter.setChipSidePadding(chipSidePadding);
+    }
+
+    public int getChipCornerRadius() {
+        return mAdapter.getChipCornerRadius();
+    }
+
+    public void setChipCornerRadius(int chipCornerRadius) {
+        mAdapter.setChipCornerRadius(chipCornerRadius);
     }
 
     public int getChipBackgroundColor() {

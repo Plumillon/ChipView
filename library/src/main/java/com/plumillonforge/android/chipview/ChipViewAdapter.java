@@ -17,6 +17,7 @@
 package com.plumillonforge.android.chipview;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -24,6 +25,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
+import android.util.AttributeSet;
 import android.util.StateSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -42,6 +44,7 @@ import java.util.Observable;
  */
 public abstract class ChipViewAdapter extends Observable {
     private Context mContext;
+    private AttributeSet mAttributeSet;
     private int mChipSpacing;
     private int mLineSpacing;
     private int mChipPadding;
@@ -95,10 +98,14 @@ public abstract class ChipViewAdapter extends Observable {
     public abstract void onLayout(View view, int position);
 
     public ChipViewAdapter(Context context) {
+        this(context, null);
+    }
+
+    public ChipViewAdapter(Context context, AttributeSet attributeSet) {
         mContext = context;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mChipList = new ArrayList<>();
-        init();
+        setAttributeSet(attributeSet);
     }
 
     private void init() {
@@ -107,8 +114,25 @@ public abstract class ChipViewAdapter extends Observable {
         mChipPadding = mContext.getResources().getDimensionPixelSize(R.dimen.chip_padding);
         mChipSidePadding = mContext.getResources().getDimensionPixelSize(R.dimen.chip_side_padding);
         mChipCornerRadius = mContext.getResources().getDimensionPixelSize(R.dimen.chip_corner_radius);
-        mChipBackgroundColor = mContext.getResources().getColor(R.color.chip_background);
-        mChipBackgroundColorSelected = mContext.getResources().getColor(R.color.chip_background_selected);
+        mChipBackgroundColor = getColor(R.color.chip_background);
+        mChipBackgroundColorSelected = getColor(R.color.chip_background_selected);
+
+        if (mAttributeSet != null) {
+            TypedArray typedArray = mContext.getTheme().obtainStyledAttributes(mAttributeSet, R.styleable.ChipView, 0, 0);
+
+            try {
+                mChipSpacing = (int) typedArray.getDimension(R.styleable.ChipView_chip_spacing, mChipSpacing);
+                mLineSpacing = (int) typedArray.getDimension(R.styleable.ChipView_chip_line_spacing, mLineSpacing);
+                mChipPadding = (int) typedArray.getDimension(R.styleable.ChipView_chip_padding, mChipPadding);
+                mChipSidePadding = (int) typedArray.getDimension(R.styleable.ChipView_chip_side_padding, mChipSidePadding);
+                mChipCornerRadius = (int) typedArray.getDimension(R.styleable.ChipView_chip_corner_radius, mChipCornerRadius);
+                mChipBackgroundColor = typedArray.getColor(R.styleable.ChipView_chip_background, mChipBackgroundColor);
+                mChipBackgroundColorSelected = typedArray.getColor(R.styleable.ChipView_chip_background_selected, mChipBackgroundColorSelected);
+                mChipBackgroundRes = typedArray.getResourceId(R.styleable.ChipView_chip_background_res, 0);
+            } finally {
+                typedArray.recycle();
+            }
+        }
     }
 
     public View getView(ViewGroup parent, int position) {
@@ -248,6 +272,15 @@ public abstract class ChipViewAdapter extends Observable {
         return mContext;
     }
 
+    public AttributeSet getAttributeSet() {
+        return mAttributeSet;
+    }
+
+    public void setAttributeSet(AttributeSet attributeSet) {
+        mAttributeSet = attributeSet;
+        init();
+    }
+
     public List<Chip> getChipList() {
         return mChipList;
     }
@@ -310,7 +343,7 @@ public abstract class ChipViewAdapter extends Observable {
         mChipSidePadding = chipSidePadding;
     }
 
-    public int getChipCornerRadius(int chipCornerRadius) {
+    public int getChipCornerRadius() {
         return mChipCornerRadius;
     }
 
@@ -339,7 +372,7 @@ public abstract class ChipViewAdapter extends Observable {
     }
 
     public void setChipTextSize(int chipTextSize) {
-        this.mChipTextSize = chipTextSize;
+        mChipTextSize = chipTextSize;
     }
 
     /**

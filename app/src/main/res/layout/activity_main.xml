@@ -1,4 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:chip="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -23,6 +24,26 @@
             android:id="@+id/text_chip_default"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/attrs_chip" />
+
+        <com.plumillonforge.android.chipview.ChipView
+            android:id="@+id/text_chip_attrs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            chip:chip_background="@color/deep_orange"
+            chip:chip_background_selected="@color/blue_grey"
+            chip:chip_corner_radius="6dp"
+            chip:chip_line_spacing="20dp"
+            chip:chip_padding="10dp"
+            chip:chip_side_padding="10dp"
+            chip:chip_spacing="16dp" />
+        <!-- chip:chip_background_res="@drawable/chip_selector" -->
 
         <TextView
             android:layout_width="wrap_content"

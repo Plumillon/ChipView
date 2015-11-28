@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements OnChipClickListen
     private List<Chip> mTagList2;
 
     private ChipView mTextChipDefault;
+    private ChipView mTextChipAttrs;
     private ChipView mTextChipLayout;
     private ChipView mTextChipOverride;
 
@@ -48,6 +49,16 @@ public class MainActivity extends AppCompatActivity implements OnChipClickListen
         // Default ChipTextView
         mTextChipDefault = (ChipView) findViewById(R.id.text_chip_default);
         mTextChipDefault.setChipList(mTagList1);
+
+        // Attrs ChipTextView
+        mTextChipAttrs = (ChipView) findViewById(R.id.text_chip_attrs);
+        mTextChipAttrs.setChipList(mTagList1);
+        mTextChipAttrs.setOnChipClickListener(new OnChipClickListener() {
+            @Override
+            public void onChipClick(Chip chip) {
+
+            }
+        });
 
         // Custom layout and background colors
         mTextChipLayout = (ChipView) findViewById(R.id.text_chip_layout);

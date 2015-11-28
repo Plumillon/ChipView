@@ -143,7 +143,26 @@ chipDefault.setOnChipClickListener(new OnChipClickListener() {
 ```
 
 ### More layout control
-If the default layout and backgroud color doesn't match your needs, you can override it in differents ways.
+If the default layout and backgroud color doesn't match your needs, you can override it in different ways.
+
+#### XML attributes (without custom adapter) ####
+Here is an example of all possible XML attributes :
+```
+<com.plumillonforge.android.chipview.ChipView
+    android:id="@+id/text_chip_attrs"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    chip:chip_background="@color/deep_orange"
+    chip:chip_background_selected="@color/blue_grey"
+    chip:chip_corner_radius="6dp"
+    chip:chip_line_spacing="20dp"
+    chip:chip_padding="10dp"
+    chip:chip_side_padding="10dp"
+    chip:chip_spacing="16dp"
+    chip:chip_background_res="@drawable/chip_selector" />
+```
+**`chip_background` and `chip_background_selected` will be overrided by `chip_background_res` if provided**
+
 
 #### Changing the background colors
 You can change all the `Chip` background in one line :
