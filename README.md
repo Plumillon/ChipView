@@ -182,11 +182,12 @@ chipView.setChipBackgroundRes(R.drawable.chipview_selector);
 
 Or remove the background completely with `setHasBackground`
 
-#### Changing the Chip spacing, line spacing and Chip padding
+#### Changing the Chip spacing, line spacing, Chip padding and corner radius
 * You can control the space between `Chip` with `setChipSpacing` (default is 4dp)
 * You can control the space between each line of `Chip` with `setChipLineSpacing` (default is 4dp)
 * You can control the top and bottom `Chip` padding with `setChipPadding` (default is 2dp)
 * You can control the left and right `Chip` padding with `setChipSidePadding` (default is 6dp)
+* You can control the `Chip` background corner radius `setChipCornerRadius` (default is 16dp)
 
 #### Changing all the Chip layout
 If you want your own layout for all `Chip`, you can specify it in your adapter (or via the `ChipView` proxy method) :
